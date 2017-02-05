@@ -26,11 +26,4 @@ This document contains the configuration options for smart dashboard.
 |**metric-table [donut mode]**|
 |<img src="./resources/metric-table_donut.png" width="900">|
 
-### 1.1 Line Chart
-### 1.2 Area Chart
-### 1.3 Bar Chart
-### 1.4 Hi Low Avg
-### 1.5 Average Last
-### 1.6 Donut
-### 1.7 Metric Table
 
