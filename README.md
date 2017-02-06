@@ -168,9 +168,14 @@ The dashboard can contain multiple tabs. Each tab contains multiple widgets.
             {
               "metricPathSuffix": "*|Summary|Container Count",
               "metricNameIndicesInSuffix": [2],
-              "timeRollupType": "avg|sum"
+              "timeRollupType": "avg|sum",
+              "outlier": {..},
+              "threshold": {..}
             }
-          ]
+          ],
+          "header": {..},
+          "legend": {..},
+          "outlier": {..}
         },
         {...}
        ]
@@ -183,7 +188,42 @@ The dashboard can contain multiple tabs. Each tab contains multiple widgets.
 - `clusterRollupType`: If set, the results returned by the metrics(`metricDefs`) will be rolledup based on the type (avg|sum). This only makes sense for label like metrics `hi-lo-avg|average-last|donut`.
 - `metricDefs`: Defines what metrics to be fetched.
   * `metricPath|metricPathSuffix` : The absolute path or relative path to the metric. The relative path is relative to the config.json.
+    * eg. `"metricPathSuffix": "*|Summary|Container Count"` - This will be resolved to multiple metrics due to the `*`
+    * eg. `"metricPathSuffix": "{x}|Summary|Container Count"` - This `{x}` is used in dynamic dashboards (section 3.3.2). The `{x}` will be replaced by the metric name index resolved in the `dashboards/$directory/dashboards.json`.  
   * `metricNameIndices|metricNameIndicesInSuffix`: The indices to resolve the name of the metrics
   * `timeRollupType`: How to find the time rollup value of the metric.
   * `maxMetricPath|maxMetricPathSuffix`: This is used to find the max value of the give metric. This is used for health rules or it can be used to show the value in donut.
   * `maxIdentifierIndices|maxIdentifierIndicesInSuffix`: The identifier for max metric path.
+  * `application`: Optional, if not set it will use the one set in config.json
+  * `excludes`: Regex to exclude the resolved metrics eg. `[".*Average.*"]`
+
+#### 3.4.1 Special Cases
+This section defines the additional special attributes available for the widgets.
+
+##### 3.4.1.1 `line-chart`
+The default selected mode of the chart
+```
+"widget":[{
+    "mode": "linear|log|table"
+}]
+```
+##### 3.4.1.2 `donut`
+```
+"widget":[{
+    "titleIndices":[0]
+    "titleIndicesInSuffix":[0]
+}]
+```
+##### 3.4.1.2 `metric-table`
+```
+"widget": {
+    "itemsPerPage": 50,
+    "tableType": "donut", # Default selected mode
+    "metricDefs": [{
+      "rowIdentifiers": [3],
+      "rowIdentifiersInSuffix": [3],
+      "columnIdentifiers": [4],
+      "columnIdentifiersInSuffix": [4],
+     }]
+  }
+```
