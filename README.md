@@ -147,3 +147,43 @@ The following example shows the dynamic menu resolving down 2 levels. It resolve
 </tr>
 </table>
 eg. Application Infrastructure Performance|AccountService|Custom Metrics|Docker|`dockerhost1.example.com`|`rabbitmq_container`|CPU|Total %
+
+### 3.4 `dashboards/$directory/dashboard-$id.json`
+The dashboard can contain multiple tabs. Each tab contains multiple widgets.
+```
+{
+  "title": "Docker",
+  "tabs":[
+    {
+      "name": "Dashboard",
+      "widgets":[
+        {
+          "row": 0,
+          "col": 0,
+          "sizeX": 2,
+          "sizeY": 1,
+          "type": "hi-lo-avg",
+          "clusterRollupType":"avg|sum",
+          "metricDefs": [
+            {
+              "metricPathSuffix": "*|Summary|Container Count",
+              "metricNameIndicesInSuffix": [2],
+              "timeRollupType": "avg|sum"
+            }
+          ]
+        },
+        {...}
+       ]
+    }
+  ]
+}
+```
+- `row`,`col`,`sizeX`,`sizeY`: Defines the position and the size of the widget in the grid. By default, there are 6 columns in the grid.
+- `type`: `line-chart|heat-map|area-chart|bar-chart|hi-lo-avg|average-last|donut|metric-table`
+- `clusterRollupType`: If set, the results returned by the metrics(`metricDefs`) will be rolledup based on the type (avg|sum). This only makes sense for label like metrics `hi-lo-avg|average-last|donut`.
+- `metricDefs`: Defines what metrics to be fetched.
+  * `metricPath|metricPathSuffix` : The absolute path or relative path to the metric. The relative path is relative to the config.json.
+  * `metricNameIndices|metricNameIndicesInSuffix`: The indices to resolve the name of the metrics
+  * `timeRollupType`: How to find the time rollup value of the metric.
+  * `maxMetricPath|maxMetricPathSuffix`: This is used to find the max value of the give metric. This is used for health rules or it can be used to show the value in donut.
+  * `maxIdentifierIndices|maxIdentifierIndicesInSuffix`: The identifier for max metric path.
